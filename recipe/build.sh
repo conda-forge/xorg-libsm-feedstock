@@ -28,5 +28,13 @@ fi
 make -j$CPU_COUNT
 make install
 make check
-rm -rf $PREFIX/share/doc/${PKG_NAME#xorg-}
-rm -f $PREFIX/lib/libSM.a $PREFIX/lib/libSM.la
+
+rm -rf $PREFIX/share/doc/libSM
+
+# Prefer dynamic libraries to static, and dump libtool helper files
+for lib_ident in SM; do
+    rm -f $PREFIX/lib/lib${lib_ident}.la
+    if [ -e $PREFIX/lib/lib${lib_ident}$SHLIB_EXT ] ; then
+        rm -f $PREFIX/lib/lib${lib_ident}.a
+    fi
+done
