@@ -15,27 +15,20 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 3
   detect_binary_files_with_prefix: true
-  features:
-    - vc9  # [win and py27]
-    - vc10  # [win and py34]
-    - vc14  # [win and py>=35]
 
 requirements:
   build:
     - m2-autoconf  # [win]
     - m2-automake{{ am_version }}  # [win]
     - m2-libtool  # [win]
-    - m2w64-pkg-config  # [win]
-    - m2w64-toolchain  # [win]
     - pkg-config  # [not win]
     - posix  # [win]
-    - python  # [win]
-    - toolchain
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and py>=35]
+    - {{ compiler('c') }}        # [unix]
+    - {{ compiler('m2w64_c') }}  # [win]
+  host:
+    - m2w64-pkg-config  # [win]
     - libuuid 1.0.*  # [not win]
     - xorg-util-macros
     - xorg-xproto
@@ -43,9 +36,6 @@ requirements:
     - xorg-libice 1.0.*
   run:
     - libuuid 1.0.*  # [not win]
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and py>=35]
     - xorg-libice 1.0.*
 
 test:
