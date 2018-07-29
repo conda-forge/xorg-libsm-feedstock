@@ -59,6 +59,12 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     configure_args+=(--disable-unix-transport)
 fi
 
+# Force use of system libuuid on macOS. Due to how the configure script
+# works, LIBUUID_{CFLAGS,LIBS} can't be exactly empty here.
+if [[ $(uname) == Darwin ]] ; then
+    export LIBUUID_CFLAGS=" " LIBUUID_LIBS=" "
+fi
+
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT
 make install
