@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 5
+  number: 7
   detect_binary_files_with_prefix: true
 
 requirements:
@@ -29,13 +29,13 @@ requirements:
     - {{ compiler('c') }}        # [unix]
     - {{ compiler('m2w64_c') }}  # [win]
   host:
-    - libuuid 1.0.*  # [linux]
+    - libuuid  # [linux]
     - xorg-util-macros
     - xorg-xproto
     - xorg-xtrans
     - xorg-libice 1.0.*
   run:
-    - libuuid 1.0.*  # [linux]
+    - libuuid  # [linux]
     - xorg-libice 1.0.*
 
 test:
