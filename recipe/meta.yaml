@@ -1,8 +1,8 @@
 {% set xorg_name = "libSM" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.2.2" %}
-{% set sha256 = "0baca8c9f5d934450a70896c4ad38d06475521255ca63b717a6510fdb6e287bd" %}
+{% set version = "1.2.3" %}
+{% set sha256 = "2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb" %}
 {% set am_version = "1.15" %} # keep synchronized with build.sh
 
 package:
@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1006
+  number: 1000
   detect_binary_files_with_prefix: true
 
 requirements:
