@@ -1,8 +1,8 @@
 {% set xorg_name = "libSM" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.2.3" %}
-{% set sha256 = "2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb" %}
+{% set version = "1.2.4" %}
+{% set sha256 = "fdcbe51e4d1276b1183da77a8a4e74a137ca203e0bcfb20972dd5f3347e97b84" %}
 {% set am_version = "1.15" %} # keep synchronized with build.sh
 
 package:
@@ -15,8 +15,10 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1000
+  number: 0
   detect_binary_files_with_prefix: true
+  run_exports:
+    - {{ pin_subpackage(name|lower) }}
 
 requirements:
   build:
@@ -39,10 +41,7 @@ requirements:
     - xorg-util-macros
     - xorg-xproto
     - xorg-xtrans
-    - xorg-libice 1.0.*
-  run:
-    - libuuid  # [linux]
-    - xorg-libice 1.0.*
+    - xorg-libice 1.1.*
 
 test:
   commands:
