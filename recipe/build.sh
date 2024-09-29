@@ -35,6 +35,9 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     )
     autoreconf "${autoreconf_args[@]}"
 
+    # Failing to disable this leads to compile errors:
+    export CONFIG_FLAGS="--disable-ipv6"
+
     # And we need to add the search path that lets libtool find the
     # msys2 stub libraries for ws2_32.
     platlibs=$(cd $(dirname $($CC --print-prog-name=ld))/../sysroot/usr/lib && pwd -W)
