@@ -1,9 +1,6 @@
 #! /bin/bash
-# Get an updated config.sub and config.guess
-cp $BUILD_PREFIX/share/gnuconfig/config.* .
 
-set -e
-IFS=$' \t\n' # workaround for conda 4.2.13+toolchain bug
+set -xeo pipefail
 
 # Adopt a Unix-friendly path if we're on Windows (see bld.bat).
 [ -n "$PATH_OVERRIDE" ] && export PATH="$PATH_OVERRIDE"
@@ -24,7 +21,7 @@ fi
 
 # On Windows we need to regenerate the configure scripts.
 if [ -n "$CYGWIN_PREFIX" ] ; then
-    am_version=1.15 # keep sync'ed with meta.yaml
+    am_version=1.16 # keep sync'ed with meta.yaml
     export ACLOCAL=aclocal-$am_version
     export AUTOMAKE=automake-$am_version
     autoreconf_args=(
@@ -44,6 +41,9 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     test -f $platlibs/libws2_32.a || { exit "error locating libws2_32" ; exit 1 ; }
     export LDFLAGS="$LDFLAGS -L$platlibs"
 else
+    # Get an updated config.sub and config.guess
+    cp $BUILD_PREFIX/share/gnuconfig/config.* .
+
     # for other platforms we just need to reconf to get the correct achitecture
     echo libtoolize --force
     libtoolize --force
@@ -83,12 +83,9 @@ fi
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT
 make install
+
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
-make check
+    make check
 fi
 
 rm -rf $uprefix/share/doc/libSM
-
-# Remove any new Libtool files we may have installed. It is intended that
-# conda-build will eventually do this automatically.
-find $uprefix/. -name '*.la' -delete
