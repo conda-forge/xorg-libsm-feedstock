@@ -45,8 +45,8 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     export LDFLAGS="$LDFLAGS -L$platlibs"
 else
     # for other platforms we just need to reconf to get the correct achitecture
-    echo libtoolize
-    libtoolize
+    echo libtoolize --force
+    libtoolize --force
     echo aclocal -I $PREFIX/share/aclocal -I $BUILD_PREFIX/share/aclocal
     aclocal -I $PREFIX/share/aclocal -I $BUILD_PREFIX/share/aclocal
     echo autoheader
