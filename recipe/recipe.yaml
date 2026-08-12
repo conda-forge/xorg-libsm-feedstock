@@ -1,0 +1,77 @@
+schema_version: 1
+
+context:
+  xorg_name: libSM
+  xorg_category: lib
+  name: ${{ ("xorg-" ~ xorg_name) | lower }}
+  version: "1.2.6"
+  am_version: "1.16"  # keep synchronized with build.sh
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://www.x.org/releases/individual/${{ xorg_category }}/${{ xorg_name }}-${{ version }}.tar.xz
+  sha256: be7c0abdb15cbfd29ac62573c1c82e877f9d4047ad15321e7ea97d1e43d835be
+  patches:
+    - if: win
+      then: mingw.patch
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - if: unix
+      then:
+        - pkg-config
+        - gnuconfig
+        - make
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - autoconf
+        - automake
+        - gettext
+        - libtool
+    - if: win
+      then:
+        - m2-autoconf
+        - m2-automake${{ am_version }}
+        - m2-libtool
+        - m2-pkg-config
+        - m2-base
+        - m2-make
+        - ${{ compiler('m2w64_c') }}
+        - ${{ stdlib('m2w64_c') }}
+  host:
+    - if: linux
+      then: libuuid
+    - xorg-util-macros
+    - xorg-xorgproto
+    - xorg-xtrans
+    - xorg-libice
+  run_exports:
+    - ${{ pin_subpackage(name) }}
+
+tests:
+  - script:
+      - if: osx
+        then: test -f $PREFIX/lib/libSM.dylib
+      - if: linux
+        then: test -f $PREFIX/lib/libSM.so
+      - if: win
+        then:
+          - if not exist %PREFIX%/Library/lib/libSM.dll.a exit /b 1
+          - if not exist %PREFIX%/Library/bin/msys-SM-*.dll exit /b 1
+
+about:
+  homepage: https://www.x.org/
+  license: MIT
+  license_file: COPYING
+  summary: The X.org core session management library.
+
+extra:
+  feedstock-name: xorg-libsm
+  recipe-maintainers:
+    - pkgw
